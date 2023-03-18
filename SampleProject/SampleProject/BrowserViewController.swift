@@ -12,7 +12,6 @@ import SnapKit
 import Then
 
 class BrowserViewController: UIViewController {
-    
     let textField = UITextField().then {
         $0.clearButtonMode = .always
         $0.backgroundColor = .blue
@@ -20,8 +19,11 @@ class BrowserViewController: UIViewController {
         $0.layer.cornerRadius = 10.0
     }
     
-    let tableView = UITableView().then {
-        $0.backgroundColor = .blue
+    lazy var tableView = UITableView().then {
+        $0.backgroundColor = .brown
+        $0.dataSource = self
+        $0.delegate = self
+        $0.register(BrowserTableViewCell.self, forCellReuseIdentifier: "BrowserTableViewCell")
     }
     
     override func viewDidLoad() {
@@ -53,6 +55,24 @@ class BrowserViewController: UIViewController {
             self.view.addSubview($0)
         }
     }
-    
 }
 
+extension BrowserViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        85
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "BrowserTableViewCell", for: indexPath) as? BrowserTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        return cell
+    }
+    
+    
+}
